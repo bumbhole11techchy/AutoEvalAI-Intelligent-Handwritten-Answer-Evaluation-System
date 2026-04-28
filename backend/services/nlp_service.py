@@ -1,7 +1,12 @@
-from backend.services.ocr_service import extract_text
-from backend.services.embedding_service import get_embedding
+import re
+import unicodedata
 
-def process_answer(image_path: str):
-    text = extract_text(image_path)
-    embedding = get_embedding(text)
-    return text, embedding
+def normalize_text(text: str) -> str:
+    if not text:
+        return ""
+
+    text = unicodedata.normalize("NFKC", text)
+    text = text.lower().strip()
+    text = re.sub(r'\s+', ' ', text)
+
+    return text
